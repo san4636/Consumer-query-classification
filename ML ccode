@@ -1,0 +1,372 @@
+import numpy as np
+import pandas as pd
+seed = 69
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from IPython.display import display
+
+import re
+import string
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+import gensim
+import textblob
+from gensim.models import Word2Vec, word2vec
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_selection import chi2
+
+from sklearn.naive_bayes import GaussianNB, BernoulliNB, MultinomialNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC, SVC
+
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, auc, roc_curve, log_loss
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score, KFold, StratifiedKFold
+
+import pickle
+import seaborn as sns
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud, STOPWORDS
+df.dropna(axis=0, subset=['CONSUMER_COMPLAINT_NARRATIVE'], 
+          inplace=True)
+df_product_and_complaint = df[['PRODUCT', 'CONSUMER_COMPLAINT_NARRATIVE']]
+df_product_and_complaint.rename(columns={'CONSUMER_COMPLAINT_NARRATIVE':'CONSUMER_COMPLAINT'},inplace=True) 
+df.rename(columns={'CONSUMER_COMPLAINT_NARRATIVE':'CONSUMER_COMPLAINT'},inplace=True)
+to_write=open('df_product_and_complaint.pickle', 'wb') 
+ pickle.dump(df_product_and_complaint, to_write)
+with open('df_product_and_complaint.pickle', 'rb') as to_read:
+    df_product_and_complaint = pickle.load(to_read)
+    #It is used to store python objects into any file-like object such as a disk file
+ df_product_and_complaint.isnull().sum() #checking for null values
+df_product_and_complaint.head(5)
+df_credit_card = df_product_and_complaint[df_product_and_complaint['PRODUCT'] == 'Credit card']
+print('Categories in PRODUCT column:''\n')
+print(df_product_and_complaint['PRODUCT'].unique(), '\n')
+df_credit_card.rename(columns={'PRODUCT': 'Credit card'}, inplace=True)
+for complaint in df_credit_card.CONSUMER_COMPLAINT[3:4]:
+    print(complaint)
+    print('\n')
+    #printing all the categories in product column and consumer complaint of anyone record
+print('Categories in PRODUCT column:''\n')
+print(df_product_and_complaint['PRODUCT'].unique(), '\n')
+print('\n''\n')
+print('number of unique categories: ', df_product_and_complaint['PRODUCT'].nunique())
+sns.countplot(x='TIMELY_RESPONSE',data=df1)
+pd.crosstab(df1['PRODUCT'],df1['CONSUMER_DISPUTED']).plot(kind='bar')
+#proportion of disputes raised by complaint for each product category.
+fig, ax = plt.subplots(figsize=(10,8))
+
+ax = sns.countplot(y='PRODUCT', 
+                   data=df_product_and_complaint, 
+                   order=df_product_and_complaint['PRODUCT'].value_counts().index)
+
+ax.set_title('NUMBER OF COMPLAINTS IN EACH CATEGORY',size=15)
+
+# Setting labels
+# Dealing with y-labels
+ax.set_ylabel('COMPLAINT', rotation=0, size=14, labelpad=10)
+              
+# Dealing with x-labels
+ax.set_xlabel('NUMBER OF COMPLAINTS', size=14)
+
+sns.despine()
+            
+plt.savefig('freq_of_uncombined_class.png', transparency=True)
+#using count plot
+df_product_and_complaint.PRODUCT.value_counts()
+df1.dropna(axis=0, subset=['CONSUMER_COMPLAINT_NARRATIVE'],inplace=True)
+
+df1.CONSUMER_COMPLAINT_NARRATIVE.head(1)
+for product_name in df1['PRODUCT'].unique():
+    print(product_name)
+    all_words = ' '.join([text for text in df1.loc[df1['PRODUCT'].str.contains(product_name),'CONSUMER_COMPLAINT_NARRATIVE']])
+    from wordcloud import WordCloud
+    wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=110).generate(all_words)
+
+    plt.figure(figsize=(10, 7))
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis('off')
+    plt.show()
+#higher the size of word more frequency that word has
+df_product_and_complaint.drop(
+    df_product_and_complaint[
+    df_product_and_complaint.PRODUCT == 
+    'Credit reporting, credit repair services, or other personal consumer reports'].index, 
+    inplace=True) 
+
+df_product_and_complaint.drop(
+    df_product_and_complaint[
+    df_product_and_complaint.PRODUCT == 
+    'Credit card or prepaid card'].index, 
+    inplace=True) 
+
+df_product_and_complaint.drop(
+    df_product_and_complaint[
+    df_product_and_complaint.PRODUCT == 
+    'Money transfer, virtual currency, or money service'].index, 
+    inplace=True) 
+
+df_product_and_complaint.drop(
+    df_product_and_complaint[
+    df_product_and_complaint.PRODUCT == 
+    'Payday loan, title loan, or personal loan'].index, 
+    inplace=True) 
+#inorder to get accurate results we must drop aggregated columns
+fig, ax = plt.subplots(figsize=(10,8))
+
+ax = sns.countplot(y='PRODUCT', 
+                   data=df_product_and_complaint, 
+                   order=df_product_and_complaint['PRODUCT'].value_counts().index)
+
+ax.set_title('NUMBER OF COMPLAINTS IN EACH CATEGORY',size=15)
+
+# Setting labels
+# Dealing with y-labels
+ax.set_ylabel('COMPLAINT', rotation=0, labelpad=40, size=14)
+              
+# Dealing with x-labels
+ax.set_xlabel('NUMBER OF COMPLAINTS', size=14)
+
+df_product_and_complaint.PRODUCT.value_counts()
+df_product_and_complaint.replace('Student loan', 'Loan', inplace=True)
+df_product_and_complaint.replace('Consumer Loan', 'Loan', inplace=True)
+df_product_and_complaint.replace('Payday loan', 'Loan', inplace=True)
+df_product_and_complaint.replace('Vehicle loan or lease', 'Loan', inplace=True)
+df_product_and_complaint.replace('Virtual currency', 'Other financial service', inplace=True)
+df_product_and_complaint.PRODUCT.value_counts()
+df_product_and_complaint.info()
+percentage_reduction = 0.9
+
+# Debt Collection Reduction
+df_product_and_complaint_reduced = \
+df_product_and_complaint.drop(df_product_and_complaint[df_product_and_complaint['PRODUCT'] == 'Debt collection'].sample(frac=percentage_reduction).index)
+
+# Mortgage Reduction
+df_product_and_complaint_reduced = \
+df_product_and_complaint_reduced.drop(
+    df_product_and_complaint_reduced[
+        df_product_and_complaint_reduced['PRODUCT'] == 'Mortgage'].sample(frac=percentage_reduction).index)
+
+# Loan
+df_product_and_complaint_reduced = \
+df_product_and_complaint_reduced.drop(
+    df_product_and_complaint_reduced[
+        df_product_and_complaint_reduced['PRODUCT'] == 'Loan'].sample(frac=percentage_reduction).index)
+
+# Credit reporting
+df_product_and_complaint_reduced = \
+df_product_and_complaint_reduced.drop(
+    df_product_and_complaint_reduced[
+        df_product_and_complaint_reduced['PRODUCT'] == 'Credit reporting'].sample(frac=percentage_reduction).index)
+
+# Credit card
+df_product_and_complaint_reduced = \
+df_product_and_complaint_reduced.drop(
+    df_product_and_complaint_reduced[
+        df_product_and_complaint_reduced['PRODUCT'] == 'Credit card'].sample(frac=percentage_reduction).index)
+
+# Checking or savings account
+df_product_and_complaint_reduced = \
+df_product_and_complaint_reduced.drop(
+    df_product_and_complaint_reduced[
+        df_product_and_complaint_reduced['PRODUCT'] == 'Checking or savings account'].sample(frac=percentage_reduction).index)
+
+# Bank account or service
+df_product_and_complaint_reduced = \
+df_product_and_complaint_reduced.drop(
+    df_product_and_complaint_reduced[
+        df_product_and_complaint_reduced['PRODUCT'] == 'Bank account or service'].sample(frac=percentage_reduction).index)
+df_product_and_complaint_reduced.PRODUCT.value_counts()
+df_product_and_complaint_reduced.info()
+# Exploring the new number of mutli-class categories we have
+print('--------------')
+print('Categories in PRODUCT column:')
+print('--------------\n')
+print(df_product_and_complaint_reduced['PRODUCT'].unique(), '\n')
+print('--------------')
+print('# of unique categories: ', df_product_and_complaint_reduced['PRODUCT'].nunique())
+print('--------------')
+fig, ax = plt.subplots(figsize=(10,8))
+
+ax = sns.countplot(y='PRODUCT', 
+                   data=df_product_and_complaint_reduced, 
+                   order=df_product_and_complaint_reduced['PRODUCT'].value_counts().index,
+                   palette='rocket'        # change the color of this graph LATER
+                  )
+
+ax.set_title('NUMBER OF COMPLAINTS IN EACH CATEGORY',size=15)
+
+# Setting labels
+# Dealing with y-labels
+ax.set_ylabel('COMPLAINT', rotation=0, labelpad=40, size=14)
+              
+# Dealing with x-labels
+ax.set_xlabel('NUMBER OF COMPLAINTS', size=14)
+
+sns.despine()
+plt.savefig('freq_of_removed_classes_and_reduced_observations.png', transparency=True)
+# Applying encoding to the PRODUCT column
+df_product_and_complaint_reduced['PRODUCT_ID'] = df_product_and_complaint_reduced['PRODUCT'].factorize()[0] 
+
+#.factorize[0] arranges the index of each encoded number accordingly to the 
+# index of your categorical variables in the PRODUCT column
+
+
+# Creates a dataframe of the PRODUCT to their respective PRODUCT_ID
+category_id_df = df_product_and_complaint_reduced[['PRODUCT', 'PRODUCT_ID']].drop_duplicates()
+
+
+# Dictionaries for future use. Creating our cheatsheets for what each encoded label represents.
+category_to_id = dict(category_id_df.values) # Creates a PRODUCT: PRODUCT_ID key-value pair
+id_to_category = dict(category_id_df[['PRODUCT_ID', 'PRODUCT']].values)  # Creates a PRODUCT_ID: PRODUCT key-value pair
+
+# New dataframe
+df_product_and_complaint_reduced.head(10)
+# Pickling reduced dataframe
+with open('df_product_and_complaint_reduced.pickle', 'wb') as to_write:
+    pickle.dump(df_product_and_complaint_reduced, to_write)
+with open('df_product_and_complaint_reduced.pickle', 'rb') as to_read:
+    df_product_and_complaint_reduced = pickle.load(to_read)
+# Reviewing our Loaded Dataframe
+print(df_product_and_complaint_reduced.info())
+print('--------------------------------------------------------------------------------------')
+print(df_product_and_complaint_reduced.head().to_string())
+sample_complaint1=df_product_and_complaint_reduced.CONSUMER_COMPLAINT[:5]
+sample_complaint1=sample_complaint1.apply(lambda x: ' '.join([i.lower() for i in x.split()]))
+#converting to lower case
+sample_complaint1
+sample_complaint1=sample_complaint1.str.replace(r'[^\w\s]',"")
+#removing punctuations
+#Below, we used three normalizazion dictionaries from these links :
+#http://www.hlt.utdallas.edu/~yangl/data/Text_Norm_Data_Release_Fei_Liu/
+#http://people.eng.unimelb.edu.au/tbaldwin/etc/emnlp2012-lexnorm.tgz
+#http://luululu.com/tweet/typo-corpus-r1.txt
+dico1 = open('doc1.txt', 'w+')
+dico2 = open('doc2.txt', 'w+')
+dico3 = open('doc3.txt', 'w+')
+dico = {}
+dico1 = open('doc1.txt', 'rb')
+for word in dico1:
+    word = word.decode('utf8')
+    word = word.split()
+    dico[word[1]] = word[3]
+dico1.close()
+dico2 = open('doc2.txt', 'rb')
+for word in dico2:
+    word = word.decode('utf8')
+    word = word.split()
+    dico[word[0]] = word[1]
+dico2.close()
+dico3 = open('doc3.txt', 'rb')
+for word in dico3:
+    word = word.decode('utf8')
+    word = word.split()
+    dico[word[0]] = word[1]
+dico3.close()
+#Text normalization is the process of transforming a text into a canonical (standard) form
+# For example, the word “gooood” and “gud” can be transformed to “good”
+def txt_std(words):
+    list_words = words.split()
+    for i in range(len(list_words)):
+        if list_words[i] in dico.keys():
+            list_words[i] = dico[list_words[i]]
+    return ' '.join(list_words)
+sample_complaint1=sample_complaint1.str.replace(r"xx+\s","")
+#removing meaningless words
+from textblob import TextBlob
+sample_complaint1 =sample_complaint1.apply(lambda x: str(TextBlob(x).correct()))
+from textblob import Word
+sample_complaint1 =sample_complaint1.apply(lambda x:' '.join([Word(i).lemmatize() for i in x.split()]))
+#lemitization
+#For example runs, running, ran are all converted to the word run
+#comparing manual preprocessing with TfidfVectorizer preprocessing
+# Looking at a sample text
+sample_complaint = list(df_product_and_complaint_reduced.CONSUMER_COMPLAINT[:5])[4]
+
+# Converting to a list for TfidfVectorizer to use
+list_sample_complaint = []
+list_sample_complaint.append(sample_complaint)
+list_sample_complaint
+# Observing what words are extracted from a TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+tf_idf3 = TfidfVectorizer(stop_words='english')
+check3 = tf_idf3.fit_transform(list_sample_complaint)
+
+print(tf_idf3.get_feature_names())
+#stop_word removal from tfidf
+# it removes punctuations and all the stopwords.
+#split dataset into X and Y
+X,Y = df_product_and_complaint_reduced.CONSUMER_COMPLAINT, df_product_and_complaint_reduced.PRODUCT_ID
+print('X shape:', X.shape ,'y shape:', Y.shape)
+from sklearn.model_selection import train_test_split
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2,stratify=Y,random_state=seed)
+print('X_train (rows):' , X_train.shape)
+print('y_train (rows):' , Y_train.shape)
+print('X_test  (rows):' , X_test.shape)
+print('y_test  (rows):' , Y_test.shape)
+#splitting the data for training and testing
+from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf1 = TfidfVectorizer(sublinear_tf=True,min_df=5,stop_words='english')
+X_train_tfidf1 = tfidf1.fit_transform(X_train).toarray()
+X_test_tfidf1 = tfidf1.transform(X_test)
+tfidf2 = TfidfVectorizer(sublinear_tf=True, min_df=5,ngram_range=(1,2), stop_words='english')
+X_train_tfidf2 = tfidf2.fit_transform(X_train).toarray()
+X_test_tfidf2 = tfidf2.transform(X_test)
+#performing text pre-processing using TFIDF vectorizer
+#fit_transform,transform functions are used scaling the data
+print('when unigrams are considered (rows, features):', X_train_tfidf1.shape)
+def metric_cv_stratified(model, X_train, y_train, n_splits, name):
+    import timeit
+    start = timeit.default_timer()
+    from sklearn.model_selection import StratifiedKFold
+    kf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=seed)
+    accuracy = 0.0
+    micro_f1 = 0.0
+    macro_precision = 0.0
+    macro_recall = 0.0
+    macro_f1 = 0.0
+    weighted_precision = 0.0
+    weighted_recall = 0.0
+    weighted_f1 = 0.0
+    from sklearn.model_selection import cross_val_score
+    accuracy = np.mean(cross_val_score(model, X_train, Y_train, cv=kf, scoring='accuracy'))
+    macro_precision = np.mean(cross_val_score(model, X_train, Y_train, cv=kf,                  scoring='precision_macro'))
+    macro_recall = np.mean(cross_val_score(model, X_train, Y_train, cv=kf, scoring='recall_macro'))
+    macro_f1 = np.mean(cross_val_score(model, X_train, Y_train, cv=kf, scoring='f1_macro'))
+    weighted_precision = np.mean(cross_val_score(model, X_train, Y_train, cv=kf, scoring='precision_weighted'))
+    weighted_recall = np.mean(cross_val_score(model, X_train, Y_train, cv=kf, scoring='recall_weighted'))
+    weighted_f1 = np.mean(cross_val_score(model, X_train, Y_train, cv=kf, scoring='f1_weighted'))
+    stop = timeit.default_timer()
+    elapsed_time = stop - start
+    return pd.DataFrame({'Model'    : [name],
+                         'Accuracy' : [accuracy],
+                         'Macro Precision': [macro_precision],
+                         'Macro Recall'   : [macro_recall],
+                         'Macro F1score'  : [macro_f1],
+                         'Weighted Precision': [weighted_precision],
+                         'Weighted Recall'   : [weighted_recall],
+                         'Weighted F1'  : [weighted_f1],
+                         'Time taken': [elapsed_time] 
+                        })
+mnb = MultinomialNB()
+results_cv_stratified_1gram = metric_cv_stratified(mnb, X_train_tfidf1, Y_train, 5, 'MultinomialNB1')
+results_cv_stratified_2gram = metric_cv_stratified(mnb, X_train_tfidf2, Y_train, 5, 'MultinomialNB2')
+gnb = GaussianNB()
+mnb = MultinomialNB()
+logit = LogisticRegression(random_state=seed)
+randomforest = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)
+linearsvc = LinearSVC()
+results_cv_straitified_1gram = pd.concat([metric_cv_stratified(mnb, X_train_tfidf1, Y_train, 5, 'MultinomialNB1'),
+                                           metric_cv_stratified(gnb, X_train_tfidf1, Y_train, 5, 'GaussianNB1'),
+                                           metric_cv_stratified(logit, X_train_tfidf1, Y_train, 5, 'LogisticRegression1'),
+                                           metric_cv_stratified(randomforest, X_train_tfidf1, Y_train, 5, 'RandomForest1'),
+                                           metric_cv_stratified(linearsvc, X_train_tfidf1, Y_train, 5, 'LinearSVC1')], axis=0).reset_index()
+results_cv_straitified_1gram
